@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5987049358883213651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5987049358883213662}
+  - component: {fileID: 5987049358883213661}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5987049358883213662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987049358883213651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.73, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5987049358883213661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987049358883213651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0ff402a5727bd46bd6ed2ad7e2c890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mixer: {fileID: 24100000, guid: c964298a31dcf3948b8617ae3fbd6bc8, type: 2}
+  snapshotList:
+  - {fileID: 245442439592587424, guid: c964298a31dcf3948b8617ae3fbd6bc8, type: 2}
+  - {fileID: 24500006, guid: c964298a31dcf3948b8617ae3fbd6bc8, type: 2}
+  - {fileID: 245800633914802954, guid: c964298a31dcf3948b8617ae3fbd6bc8, type: 2}
+  sfxList:
+  - {fileID: 8300000, guid: 47742c71740080a4e8ef8b235743ed0d, type: 3}
+  - {fileID: 8300000, guid: c271c7afff6645b4f84df2e007b408fc, type: 3}
+  - {fileID: 8300000, guid: b6f2a372471b60244a43a38c224f4974, type: 3}
+  - {fileID: 8300000, guid: 29897b3127c35ba469ff9e3ceba8beea, type: 3}
+  - {fileID: 8300000, guid: 16fbe044a17104c44b298de09b5353d2, type: 3}
+  - {fileID: 8300000, guid: 2cb33fa3fd1e3104ea44265284e46607, type: 3}
+  - {fileID: 8300000, guid: 31033066c84241640afca2a0c5caa573, type: 3}
+  - {fileID: 8300000, guid: 34912b34f9049194f9420f484c9c8317, type: 3}
+  - {fileID: 8300000, guid: 26607c6e35e10dc48a06f15214588416, type: 3}
+  - {fileID: 8300000, guid: 101c82e3c01a15c4db9eb1575bc6a2e3, type: 3}
+  - {fileID: 8300000, guid: cb902826cb10c3042b84eae62d595b7a, type: 3}
+  bgmList:
+  - {fileID: 8300000, guid: 99ee8e9ecfc148b468039ab3047f51ca, type: 3}
