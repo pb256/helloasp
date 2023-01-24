@@ -35,6 +35,7 @@ public sealed class GameManager : Singleton<GameManager>
     {
         DOTween.Init().SetCapacity(1250, 312);
         Random.InitState(System.Environment.TickCount);
+        Application.targetFrameRate = 60;
     }
 
     private void Update()
