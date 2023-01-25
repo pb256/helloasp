@@ -23,3 +23,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+// 유니티 어플리케이션에 세팅할때는 테스트환경, 리얼 환경 구성하기 위해 보통 어떻게 하는지?
