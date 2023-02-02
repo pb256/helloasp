@@ -28,7 +28,4 @@ public class MyFirstApiController : ControllerBase
             someNumber = 1212
         };
     }
-    
-    // 테스트할때 핫리로드나 비슷한 그런 방법없나?
-    // 계속 스웨거가 켜진다 으아
 }
