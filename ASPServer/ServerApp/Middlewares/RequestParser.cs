@@ -2,9 +2,15 @@ using Newtonsoft.Json.Linq;
 
 namespace ServerApp.Middlewares;
 
-public class RequestParser : IMiddleware
+public class RequestParser
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    private readonly RequestDelegate _next;
+    public RequestParser(RequestDelegate next)
+    {
+        _next = next;
+    }
+    
+    public async Task Invoke(HttpContext context)
     {
         using (var sr = new StreamReader(context.Request.Body))
         {
@@ -15,6 +21,6 @@ public class RequestParser : IMiddleware
             context.Items["text"] = text;
             context.Items["json"] = json;
         }
-        await next.Invoke(context);
+        await _next.Invoke(context);
     }
 }
