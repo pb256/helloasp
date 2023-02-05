@@ -1,4 +1,5 @@
 using System.Reflection;
+using Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Api;

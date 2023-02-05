@@ -1,6 +1,6 @@
-using System.Text;
+﻿using System.Text;
 
-namespace Api;
+namespace Core;
 
 public static class Utils
 {

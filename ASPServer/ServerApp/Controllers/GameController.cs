@@ -1,4 +1,5 @@
 using Api;
+using Core;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using ServerApp.Services;
@@ -21,11 +22,13 @@ public class GameController : ControllerBase
 
     public async Task<string> PostAsync()
     {
+        var uid = _requestContext.Uid ?? string.Empty;
         var actions = _requestContext.Actions ?? Array.Empty<JObject>();
         var response = new JArray();
         
         foreach (var actionJson in actions)
         {
+            actionJson["uid"] = uid;
             var resultJson = await ProcessActionAsync(actionJson);
             response.Add(resultJson);
         }
