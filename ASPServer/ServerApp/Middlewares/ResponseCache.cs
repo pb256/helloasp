@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.Extensions.Caching.Memory;
+using ServerApp.Services;
 
 namespace ServerApp.Middlewares;
 
@@ -19,36 +20,36 @@ public class ResponseCache
         _logger = logger;
     }
     
-    public async Task Invoke(HttpContext context)
+    public async Task Invoke(HttpContext httpContext, RequestContext requestContext)
     {
-        var request = context.Items["text"] as string;
+        var cacheKey = requestContext.CacheKey;
         
-        if (_memoryCache.TryGetValue(request, out string cachedResponse))
+        if (_memoryCache.TryGetValue(cacheKey, out string cachedResponse))
         {
-            _logger.LogInformation($"[{nameof(ResponseCache)}] FromCache: {cachedResponse}");
-            await context.Response.WriteAsync(cachedResponse);
+            _logger.LogInformation("[ResponseCache] FromCache: {cachedResponse}", cachedResponse);
+            await httpContext.Response.WriteAsync(cachedResponse);
             return;
         }
-
-        var originalStream = context.Response.Body;
+        
+        var originalStream = httpContext.Response.Body;
 
         try
         {
             await using var ms = new MemoryStream();
-            context.Response.Body = ms;
-
-            await _next.Invoke(context);
+            httpContext.Response.Body = ms;
+            
+            await _next.Invoke(httpContext);
 
             var response = Encoding.UTF8.GetString(ms.ToArray());
-            _logger.LogInformation($"[{nameof(ResponseCache)}] FromController: {response}");
-            _memoryCache.Set(request, response, TimeSpan.FromSeconds(5));
-
+            _logger.LogInformation("[ResponseCache] FromController: {response}", response);
+            _memoryCache.Set(cacheKey, response, TimeSpan.FromMinutes(1));
+            
             ms.Position = 0;
             await ms.CopyToAsync(originalStream);
         }
         finally
         {
-            context.Response.Body = originalStream;
+            httpContext.Response.Body = originalStream;
         }
     }
 }

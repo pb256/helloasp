@@ -9,7 +9,12 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.2" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Api\Api.csproj" />
     </ItemGroup>
 
 </Project>

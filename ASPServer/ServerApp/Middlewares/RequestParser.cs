@@ -1,26 +1,39 @@
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using ServerApp.Services;
 
 namespace ServerApp.Middlewares;
 
 public class RequestParser
 {
     private readonly RequestDelegate _next;
+    
     public RequestParser(RequestDelegate next)
     {
         _next = next;
     }
-    
-    public async Task Invoke(HttpContext context)
-    {
-        using (var sr = new StreamReader(context.Request.Body))
-        {
-            var text = await sr.ReadToEndAsync();
-            var json = JObject.Parse(text);
 
-            // Items: 임시 dictionary같은것
-            context.Items["text"] = text;
-            context.Items["json"] = json;
+    public async Task Invoke(HttpContext httpContext, RequestContext requestContext)
+    {
+        var sr = new StreamReader(httpContext.Request.Body);
+        var text = await sr.ReadToEndAsync();
+
+        try
+        {
+            JsonConvert.PopulateObject(text, requestContext);
         }
-        await _next.Invoke(context);
+        catch
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+        
+        if (string.IsNullOrEmpty(requestContext.Uid)
+            || requestContext.Actions == null)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+        
+        await _next.Invoke(httpContext);
     }
 }
