@@ -1,45 +1,63 @@
 using Core;
-using Microsoft.Extensions.Caching.Memory;
+using Models.Contexts;
+using Models.Model;
 using Newtonsoft.Json.Linq;
 
 namespace Api.Actions;
 
 public class GetPlayerScore : IApiService
 {
-    private readonly IMemoryCache _memoryCache;
+    private readonly GameContext _game;
 
-    public GetPlayerScore(IMemoryCache memoryCache)
+    public GetPlayerScore(GameContext game)
     {
-        _memoryCache = memoryCache;
+        _game = game;
     }
     
-    public Task<JObject> ProcessAsync(JObject param)
+    public async Task<JObject> ProcessAsync(JObject param)
     {
-        var score = 0;
-        if (_memoryCache.TryGetValue(Tuple.Create(param.Value<string>("uid"), "score"), out string scoreStr))
-            int.TryParse(scoreStr, out score);
-        return Task.FromResult(new JObject{ ["score"] = score });
+        var uid = param.Value<string>("uid");
+
+        var highScoreData = await _game.FindAsync<UserScore>(uid);
+        return new JObject{ ["score"] = highScoreData?.score ?? 0 };
     }
 }
 
 public class SetPlayerScore : IApiService
 {
-    private readonly IMemoryCache _memoryCache;
+    private readonly GameContext _game;
 
-    public SetPlayerScore(IMemoryCache memoryCache)
+    public SetPlayerScore(GameContext game)
     {
-        _memoryCache = memoryCache;
+        _game = game;
     }
     
-    public Task<JObject> ProcessAsync(JObject param)
+    public async Task<JObject> ProcessAsync(JObject param)
     {
         var score = param.Value<int>("score");
-
-        // score 범위 체크
-        if (score is not (> 0 and < 10000))
-            return Task.FromResult(new JObject { ["status"] = Status.INVALID_REQUEST });
+        var uid = param.Value<string>("uid");
         
-        _memoryCache.Set(Tuple.Create(param.Value<string>("uid"), "score"), score.ToString());
-        return Task.FromResult(new JObject());
+        if (score is not (> 0 and < 10000))
+            return new JObject { ["status"] = Status.INVALID_REQUEST };
+        
+        if (uid == default)
+            return new JObject { ["status"] = Status.INVALID_REQUEST };
+        
+        var highScoreData = await _game.FindAsync<UserScore>(uid);
+        if (highScoreData == default)
+        {
+            highScoreData = new UserScore
+            {
+                uid = uid,
+                score = 0,
+                time_stamp = DateTime.UtcNow
+            };
+            await _game.AddAsync(highScoreData);
+        }
+
+        highScoreData.score = Math.Max(highScoreData.score, score);
+        await _game.SaveChangesAsync();
+        
+        return new JObject();
     }
 }
