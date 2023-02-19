@@ -23,7 +23,7 @@ public class ResponseCache
     public async Task Invoke(HttpContext httpContext, RequestContext requestContext)
     {
         var cacheKey = requestContext.CacheKey;
-        var cached = _redis.StringGet(cacheKey);
+        var cached = await _redis.StringGetAsync(cacheKey);
         if (cached.HasValue)
         {
             var strValue = cached.ToString();
@@ -43,7 +43,7 @@ public class ResponseCache
 
             var response = Encoding.UTF8.GetString(ms.ToArray());
             _logger.LogInformation("[ResponseCache] FromController: {response}", response);
-            _redis.StringSet(cacheKey, response, TimeSpan.FromSeconds(10));
+            await _redis.StringSetAsync(cacheKey, response, TimeSpan.FromSeconds(10));
 
             ms.Position = 0;
             await ms.CopyToAsync(originalStream);
