@@ -23,6 +23,9 @@ builder.Services
     .AddDbContext<GameContext>(options => options.UseMySQL(dbConnectionString))
     .AddControllers();
 
+builder.Host
+    .ConfigureLogging(loggingBuilder => loggingBuilder.AddLog4Net());
+
 var app = builder.Build();
 
 app.UseMiddleware<RequestParser>();
