@@ -49,8 +49,7 @@ public class SetPlayerScore : IApiService
             highScoreData = new UserScore
             {
                 uid = uid,
-                score = 0,
-                time_stamp = DateTime.UtcNow
+                score = 0
             };
             await _game.AddAsync(highScoreData);
         }
