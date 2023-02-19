@@ -1,33 +1,34 @@
 using System.Text;
-using Microsoft.Extensions.Caching.Memory;
 using ServerApp.Services;
+using StackExchange.Redis;
 
 namespace ServerApp.Middlewares;
 
 public class ResponseCache
 {
     private readonly RequestDelegate _next;
-    private readonly IMemoryCache _memoryCache;
+    private readonly IDatabase _redis;
     private readonly ILogger<ResponseCache> _logger;
     
     public ResponseCache(
         RequestDelegate next,
-        IMemoryCache memoryCache,
+        IDatabase redis,
         ILogger<ResponseCache> logger)
     {
         _next = next;
-        _memoryCache = memoryCache;
+        _redis = redis;
         _logger = logger;
     }
     
     public async Task Invoke(HttpContext httpContext, RequestContext requestContext)
     {
         var cacheKey = requestContext.CacheKey;
-        
-        if (_memoryCache.TryGetValue(cacheKey, out string cachedResponse))
+        var cached = _redis.StringGet(cacheKey);
+        if (cached.HasValue)
         {
-            _logger.LogInformation("[ResponseCache] FromCache: {cachedResponse}", cachedResponse);
-            await httpContext.Response.WriteAsync(cachedResponse);
+            var strValue = cached.ToString();
+            _logger.LogInformation("[ResponseCache] FromCache: {cachedResponse}", strValue);
+            await httpContext.Response.WriteAsync(strValue);
             return;
         }
         
@@ -42,8 +43,8 @@ public class ResponseCache
 
             var response = Encoding.UTF8.GetString(ms.ToArray());
             _logger.LogInformation("[ResponseCache] FromController: {response}", response);
-            _memoryCache.Set(cacheKey, response, TimeSpan.FromSeconds(10));
-            
+            _redis.StringSet(cacheKey, response, TimeSpan.FromSeconds(10));
+
             ms.Position = 0;
             await ms.CopyToAsync(originalStream);
         }
