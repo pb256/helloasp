@@ -1,0 +1,163 @@
+ihaechan@haechan-ui-Mac-Studio ASPServer % dotnet ef database update -p ServerApp -c GameContext
+Build started...
+Build succeeded.
+info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
+      Entity Framework Core 6.0.13 initialized 'GameContext' using provider 'MySql.EntityFrameworkCore:6.0.10+MySQL8.0.32' with options: None
+ INFO [1] [tcdata] (?:?) - Entity Framework Core 6.0.13 initialized 'GameContext' using provider 'MySql.EntityFrameworkCore:6.0.10+MySQL8.0.32' with options: None
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='study_haechan' AND TABLE_NAME='__EFMigrationsHistory';
+ INFO [1] [tcdata] (?:?) - Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='study_haechan' AND TABLE_NAME='__EFMigrationsHistory';
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='study_haechan' AND TABLE_NAME='__EFMigrationsHistory';
+ INFO [1] [tcdata] (?:?) - Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='study_haechan' AND TABLE_NAME='__EFMigrationsHistory';
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT `MigrationId`, `ProductVersion`
+      FROM `__EFMigrationsHistory`
+      ORDER BY `MigrationId`;
+ INFO [1] [tcdata] (?:?) - Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+info: Microsoft.EntityFrameworkCore.Migrations[20402]
+      Applying migration '20230219101037_UseKeyless'.
+ INFO [1] [tcdata] (?:?) - Applying migration '20230219101037_UseKeyless'.
+Applying migration '20230219101037_UseKeyless'.
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      DROP PROCEDURE IF EXISTS `MYSQL_BEFORE_DROP_PRIMARY_KEY`;
+          CREATE PROCEDURE `MYSQL_BEFORE_DROP_PRIMARY_KEY`(IN `SCHEMA_NAME_ARGUMENT` VARCHAR(255), IN `TABLE_NAME_ARGUMENT` VARCHAR(255))
+          BEGIN
+          DECLARE HAS_AUTO_INCREMENT_ID TINYINT(1);
+          DECLARE PRIMARY_KEY_COLUMN_NAME VARCHAR(255);
+          DECLARE PRIMARY_KEY_TYPE VARCHAR(255);
+          DECLARE SQL_EXP VARCHAR(1000);
+          SELECT COUNT(*)
+            INTO HAS_AUTO_INCREMENT_ID
+            FROM `information_schema`.`COLUMNS`
+            WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+            AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+            AND `Extra` = 'auto_increment'
+            AND `COLUMN_KEY` = 'PRI'
+            LIMIT 1;
+          IF HAS_AUTO_INCREMENT_ID THEN
+            SELECT `COLUMN_TYPE`
+            INTO PRIMARY_KEY_TYPE
+            FROM `information_schema`.`COLUMNS`
+            WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+              AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+              AND `COLUMN_KEY` = 'PRI'
+            LIMIT 1;
+            SELECT `COLUMN_NAME`
+            INTO PRIMARY_KEY_COLUMN_NAME
+            FROM `information_schema`.`COLUMNS`
+            WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+              AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+              AND `COLUMN_KEY` = 'PRI'
+            LIMIT 1;
+            SET SQL_EXP = CONCAT('ALTER TABLE `', (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA())), '`.`', TABLE_NAME_ARGUMENT, '` MODIFY COLUMN `', PRIMARY_KEY_COLUMN_NAME, '` ', PRIMARY_KEY_TYPE, ' NOT NULL;');
+            SET @SQL_EXP = SQL_EXP;
+            PREPARE SQL_EXP_EXECUTE FROM @SQL_EXP;
+            EXECUTE SQL_EXP_EXECUTE;
+            DEALLOCATE PREPARE SQL_EXP_EXECUTE;
+          END IF;
+          END;
+ERROR [1] [tcdata] (?:?) - Failed executing DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP PROCEDURE IF EXISTS `MYSQL_BEFORE_DROP_PRIMARY_KEY`;
+    CREATE PROCEDURE `MYSQL_BEFORE_DROP_PRIMARY_KEY`(IN `SCHEMA_NAME_ARGUMENT` VARCHAR(255), IN `TABLE_NAME_ARGUMENT` VARCHAR(255))
+    BEGIN
+    DECLARE HAS_AUTO_INCREMENT_ID TINYINT(1);
+    DECLARE PRIMARY_KEY_COLUMN_NAME VARCHAR(255);
+    DECLARE PRIMARY_KEY_TYPE VARCHAR(255);
+    DECLARE SQL_EXP VARCHAR(1000);
+    SELECT COUNT(*)
+      INTO HAS_AUTO_INCREMENT_ID
+      FROM `information_schema`.`COLUMNS`
+      WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+      AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+      AND `Extra` = 'auto_increment'
+      AND `COLUMN_KEY` = 'PRI'
+      LIMIT 1;
+    IF HAS_AUTO_INCREMENT_ID THEN
+      SELECT `COLUMN_TYPE`
+      INTO PRIMARY_KEY_TYPE
+      FROM `information_schema`.`COLUMNS`
+      WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+        AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+        AND `COLUMN_KEY` = 'PRI'
+      LIMIT 1;
+      SELECT `COLUMN_NAME`
+      INTO PRIMARY_KEY_COLUMN_NAME
+      FROM `information_schema`.`COLUMNS`
+      WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+        AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+        AND `COLUMN_KEY` = 'PRI'
+      LIMIT 1;
+      SET SQL_EXP = CONCAT('ALTER TABLE `', (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA())), '`.`', TABLE_NAME_ARGUMENT, '` MODIFY COLUMN `', PRIMARY_KEY_COLUMN_NAME, '` ', PRIMARY_KEY_TYPE, ' NOT NULL;');
+      SET @SQL_EXP = SQL_EXP;
+      PREPARE SQL_EXP_EXECUTE FROM @SQL_EXP;
+      EXECUTE SQL_EXP_EXECUTE;
+      DEALLOCATE PREPARE SQL_EXP_EXECUTE;
+    END IF;
+    END;
+Failed executing DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP PROCEDURE IF EXISTS `MYSQL_BEFORE_DROP_PRIMARY_KEY`;
+    CREATE PROCEDURE `MYSQL_BEFORE_DROP_PRIMARY_KEY`(IN `SCHEMA_NAME_ARGUMENT` VARCHAR(255), IN `TABLE_NAME_ARGUMENT` VARCHAR(255))
+    BEGIN
+    DECLARE HAS_AUTO_INCREMENT_ID TINYINT(1);
+    DECLARE PRIMARY_KEY_COLUMN_NAME VARCHAR(255);
+    DECLARE PRIMARY_KEY_TYPE VARCHAR(255);
+    DECLARE SQL_EXP VARCHAR(1000);
+    SELECT COUNT(*)
+      INTO HAS_AUTO_INCREMENT_ID
+      FROM `information_schema`.`COLUMNS`
+      WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+      AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+      AND `Extra` = 'auto_increment'
+      AND `COLUMN_KEY` = 'PRI'
+      LIMIT 1;
+    IF HAS_AUTO_INCREMENT_ID THEN
+      SELECT `COLUMN_TYPE`
+      INTO PRIMARY_KEY_TYPE
+      FROM `information_schema`.`COLUMNS`
+      WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+        AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+        AND `COLUMN_KEY` = 'PRI'
+      LIMIT 1;
+      SELECT `COLUMN_NAME`
+      INTO PRIMARY_KEY_COLUMN_NAME
+      FROM `information_schema`.`COLUMNS`
+      WHERE `TABLE_SCHEMA` = (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA()))
+        AND `TABLE_NAME` = TABLE_NAME_ARGUMENT
+        AND `COLUMN_KEY` = 'PRI'
+      LIMIT 1;
+      SET SQL_EXP = CONCAT('ALTER TABLE `', (SELECT IFNULL(SCHEMA_NAME_ARGUMENT, SCHEMA())), '`.`', TABLE_NAME_ARGUMENT, '` MODIFY COLUMN `', PRIMARY_KEY_COLUMN_NAME, '` ', PRIMARY_KEY_TYPE, ' NOT NULL;');
+      SET @SQL_EXP = SQL_EXP;
+      PREPARE SQL_EXP_EXECUTE FROM @SQL_EXP;
+      EXECUTE SQL_EXP_EXECUTE;
+      DEALLOCATE PREPARE SQL_EXP_EXECUTE;
+    END IF;
+    END;
+MySql.Data.MySqlClient.MySqlException (0x80004005): Fatal error encountered during command execution.
+ ---> MySql.Data.MySqlClient.MySqlException (0x80004005): Parameter '@SQL_EXP' must be defined.
+   at MySql.Data.MySqlClient.Statement.SerializeParameter(MySqlParameterCollection parameters, MySqlPacket packet, String parmName, Int32 parameterIndex)
+   at MySql.Data.MySqlClient.Statement.InternalBindParameters(String sql, MySqlParameterCollection parameters, MySqlPacket packet)
+   at MySql.Data.MySqlClient.Statement.BindParameters()
+   at MySql.Data.MySqlClient.PreparableStatement.Execute()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Migrations.MigrationCommand.ExecuteNonQuery(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQuery(IEnumerable`1 migrationCommands, IRelationalConnection connection)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.Migrate(String targetMigration)
+   at Microsoft.EntityFrameworkCore.Design.Internal.MigrationsOperations.UpdateDatabase(String targetMigration, String connectionString, String contextType)
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.UpdateDatabaseImpl(String targetMigration, String connectionString, String contextType)
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.UpdateDatabase.<>c__DisplayClass0_0.<.ctor>b__0()
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.OperationBase.Execute(Action action)
+Fatal error encountered during command execution.
