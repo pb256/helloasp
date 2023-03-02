@@ -1,0 +1,32 @@
+@page
+@model WebCms.Pages.Test.Add
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    @{
+        for (var i = 0; i < 10; i++)
+        {
+            @Model.testText<br/>
+        }
+    }
+    <br/>
+
+    <form asp-page-handler="Add" method="post">
+        A: <input asp-for="valueA"/><br/>
+        B: <input asp-for="valueB"/><br/>
+        A + B: <input value="@Model.valueC" readonly/><br/>
+        <input class="btn" type="submit" value="ADD"/>
+    </form>
+</div>
+</body>
+</html>
