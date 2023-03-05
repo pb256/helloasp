@@ -1,0 +1,58 @@
+@page
+@model WebCms.Pages.ScoreBoard.Index
+
+@{
+    ViewData["Title"] = "스코어 보드";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>스코어 보드</h1>
+
+<form>
+    <p>
+        검색: <input type="text" asp-for="SearchString" placeholder="uid"/>
+        <input type="submit" value="검색"/>
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>순위</th>
+        <th>ID</th>
+        <th>점수</th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        foreach (var item in Model.Score)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rank)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.score)
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+<table class="table-bordered">
+    @{
+        // 아무래도 접근 방식이 잘못된듯
+        for (var i = 0; i < 5; i++)
+        {
+            <td>
+                <a asp-page="./Index" 
+                   asp-route-SearchString=@Model.SearchString
+                   asp-route-Page=@i>[@i]</a>
+            </td>
+        }
+    }
+</table>
