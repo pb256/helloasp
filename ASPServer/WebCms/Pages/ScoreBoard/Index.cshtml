@@ -15,12 +15,17 @@
     </p>
 </form>
 
+<p>
+    <a class="btn-outline-primary" asp-page="./Create">더미 데이터 추가</a>
+</p>
+
 <table class="table">
     <thead>
     <tr>
         <th>순위</th>
         <th>ID</th>
         <th>점수</th>
+        <th>편집</th>
     </tr>
     </thead>
     <tbody>
@@ -36,6 +41,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.score)
+                </td>
+                <td>
+                    <a class="btn" asp-page="./Edit" asp-route-id="@item.uid">편집</a>
                 </td>
             </tr>
         }

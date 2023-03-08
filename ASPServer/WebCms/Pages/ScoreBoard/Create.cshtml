@@ -1,0 +1,21 @@
+@page
+@model WebCms.Pages.ScoreBoard.Create
+
+@{
+    ViewData["Title"] = "스코어 데이터 생성";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>더미 데이터 생성 [uid, 점수(int)]</h1>
+<hr/>
+
+<form method="post" id="data">
+    <textarea form="data" asp-for="data.rawString"></textarea>
+    <div class="form-group">
+        <input type="submit" value="생성" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-page="./Index">돌아가기</a>
+</div>
