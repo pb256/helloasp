@@ -6,9 +6,7 @@ using DG.Tweening;
 public class GameOverScreen : MonoBehaviour
 {
     private CanvasGroup gameoverScreen;
-    public CanvasGroup highscoreCanvas;
     public CanvasGroup retryButton;
-    public DigitText highscoreText;
 
     public Button PauseButton;
 
@@ -32,8 +30,6 @@ public class GameOverScreen : MonoBehaviour
         retryButton.alpha = 0f;
         retryButton.DOFade(1f, 0.5f).SetEase(Ease.OutQuad).SetDelay(0.5f)
             .OnComplete(() => { retryButton.interactable = true; } );
-
-        highscoreText.value = GameManager.instance.GetHighscore();
 
         if (PauseButton != null) 
             PauseButton.gameObject.SetActive(false);
